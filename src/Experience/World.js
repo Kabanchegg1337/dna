@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import Dna from './Dna.js'
+import Particles from './Particles.js'
 import Experience from './Experience.js'
 
 export default class World
@@ -14,9 +16,19 @@ export default class World
         {
             if(_group.name === 'base')
             {
-                this.setDummy()
+                //this.setDummy()
+                this.setDna();
+                this.setParticles()
             }
         })
+    }
+
+    setDna(){
+        this.dna = new Dna();
+    }
+
+    setParticles(){
+        this.particles = new Particles();
     }
 
     setDummy()
@@ -34,6 +46,12 @@ export default class World
 
     update()
     {
+        if (this.dna){
+            this.dna.update();
+        }
+        if (this.particles){
+            this.particles.update();
+        }
     }
 
     destroy()
