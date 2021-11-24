@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import {Pane} from 'tweakpane'
+
 import Time from './Utils/Time.js'
 import Sizes from './Utils/Sizes.js'
 import Stats from './Utils/Stats.js'
@@ -34,7 +36,9 @@ export default class Experience
         this.time = new Time()
         this.sizes = new Sizes()
         this.setConfig()
+        this.setScrollSpeed();
         this.setStats()
+        this.setDebug();
         this.setScene()
         this.setCamera()
         this.setRenderer()
@@ -63,6 +67,39 @@ export default class Experience
         const boundings = this.targetElement.getBoundingClientRect()
         this.config.width = boundings.width
         this.config.height = boundings.height || window.innerHeight
+        this.config.scrollSpeed = 0;
+    }
+
+    setScrollSpeed(){
+        var checkScrollSpeed = (function(settings){
+            settings = settings || {};
+        
+            var lastPos, newPos, timer, delta, 
+                delay = settings.delay || 1000; // in "ms" (higher means lower fidelity )
+        
+            function clear() {
+              lastPos = null;
+              delta = 0;
+            }
+        
+            clear();
+        
+            return function(){
+              newPos = window.scrollY;
+              if ( lastPos != null ){ // && newPos < maxScroll 
+                delta = newPos -  lastPos;
+              }
+              lastPos = newPos;
+              clearTimeout(timer);
+              timer = setTimeout(clear, delay);
+              return delta;
+            };
+        })();
+        
+        // listen to "scroll" event
+        window.onscroll = () => {
+          this.config.scrollSpeed = checkScrollSpeed();
+        };
     }
 
     setStats()
@@ -70,6 +107,13 @@ export default class Experience
         if(this.config.debug)
         {
             this.stats = new Stats(true)
+        }
+    }
+
+    setDebug(){
+        if(this.config.debug){
+            this.debug = new Pane();
+            this.debug.containerElem_.style.width = '320px'
         }
     }
     
@@ -112,6 +156,8 @@ export default class Experience
         
         if(this.renderer)
             this.renderer.update()
+
+        this.config.scrollSpeed *= 0.98;
 
         window.requestAnimationFrame(() =>
         {

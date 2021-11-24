@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Experience from './Experience.js'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 
 export default class Renderer
@@ -16,7 +17,7 @@ export default class Renderer
         this.scene = this.experience.scene
         this.camera = this.experience.camera
         
-        this.usePostprocess = false
+        this.usePostprocess = true
 
         this.setInstance()
         this.setPostProcess()
@@ -24,7 +25,7 @@ export default class Renderer
 
     setInstance()
     {
-        this.clearColor = '#010101'
+        this.clearColor = '#555555'
 
         // Renderer
         this.instance = new THREE.WebGLRenderer({
@@ -65,6 +66,36 @@ export default class Renderer
         this.postProcess = {}
 
         /**
+         * Unreal bloom pass
+         */
+        this.postProcess.bloomPass = new UnrealBloomPass(new THREE.Vector2(this.config.width, this.config.height), 0.75, 0.65, 0.39)
+        
+
+        if (this.debug){
+            this.debugFolder = this.debug.addFolder({title: "Postprocessing"})
+            this.debugFolder = this.debugFolder.addFolder({title: "bloom", expanded: false})
+            this.debugFolder.addInput(
+                this.postProcess.bloomPass,
+                'strength',
+                {min: 0, max: 4, step: 0.01}
+            )
+            this.debugFolder.addInput(
+                this.postProcess.bloomPass,
+                'radius',
+                {min: 0, max: 10, step: 0.01}
+            )
+            this.debugFolder.addInput(
+                this.postProcess.bloomPass,
+                'threshold',
+                {min: -1.5, max: 1.5, step: 0.01}
+            )
+            
+            
+        }
+
+
+
+        /**
          * Render pass
          */
         this.postProcess.renderPass = new RenderPass(this.scene, this.camera.instance)
@@ -72,8 +103,8 @@ export default class Renderer
         /**
          * Effect composer
          */
-        const RenderTargetClass = this.config.pixelRatio >= 2 ? THREE.WebGLRenderTarget : THREE.WebGLMultisampleRenderTarget
-        // const RenderTargetClass = THREE.WebGLRenderTarget
+        //const RenderTargetClass = this.config.pixelRatio >= 2 ? THREE.WebGLRenderTarget : THREE.WebGLMultisampleRenderTarget
+        const RenderTargetClass = THREE.WebGLRenderTarget
         this.renderTarget = new RenderTargetClass(
             this.config.width,
             this.config.height,
@@ -90,6 +121,7 @@ export default class Renderer
         this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
         this.postProcess.composer.addPass(this.postProcess.renderPass)
+        this.postProcess.composer.addPass(this.postProcess.bloomPass)
     }
 
     resize()
