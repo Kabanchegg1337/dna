@@ -37,7 +37,7 @@ export default class Dna{
         this.lastElapsedTime = 0;
        
         if (this.debug){
-            this.debugFolder = this.debug.addFolder({title: "Dna"})
+            this.debugFolder = this.debug.addFolder({title: "Dna", expanded: false})
         }
 
         

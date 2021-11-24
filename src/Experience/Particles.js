@@ -15,7 +15,7 @@ export default class Particles {
 
         this.count = 500;
         if (this.debug){
-            this.debugFolder = this.debug.addFolder({title: "particles"})
+            this.debugFolder = this.debug.addFolder({title: "particles", expanded: false})
         }
 
         this.parallax = {

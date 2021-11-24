@@ -3,6 +3,8 @@ import Experience from './Experience.js'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import ChromaticShader from './Postprocessing/ChromaticShader.js'
 
 export default class Renderer
 {
@@ -63,7 +65,28 @@ export default class Renderer
 
     setPostProcess()
     {
+        if (this.debug){
+            this.postProcessFolder = this.debug.addFolder({title: "Postprocessing"});
+        }
+
         this.postProcess = {}
+
+
+        /**
+         * Chromatic abberation shader
+         */
+        this.postProcess.chromaticPass = new ShaderPass( ChromaticShader );
+        this.postProcess.chromaticPass.uniforms.uMaxDistort.value = 0.09;
+
+        if (this.debug){
+            this.chromaticFolder = this.postProcessFolder.addFolder({title: "Chromatic"})
+            this.chromaticFolder.addInput(
+                this.postProcess.chromaticPass.uniforms.uMaxDistort,
+                'value',
+                {min: 0, max: 2, step: 0.01, label: "MaxDistortion"}
+            )
+            
+        }
 
         /**
          * Unreal bloom pass
@@ -72,19 +95,18 @@ export default class Renderer
         
 
         if (this.debug){
-            this.debugFolder = this.debug.addFolder({title: "Postprocessing"})
-            this.debugFolder = this.debugFolder.addFolder({title: "bloom", expanded: false})
-            this.debugFolder.addInput(
+            this.bloomFolder = this.postProcessFolder.addFolder({title: "Bloom", expanded: false})
+            this.bloomFolder.addInput(
                 this.postProcess.bloomPass,
                 'strength',
                 {min: 0, max: 4, step: 0.01}
             )
-            this.debugFolder.addInput(
+            this.bloomFolder.addInput(
                 this.postProcess.bloomPass,
                 'radius',
                 {min: 0, max: 10, step: 0.01}
             )
-            this.debugFolder.addInput(
+            this.bloomFolder.addInput(
                 this.postProcess.bloomPass,
                 'threshold',
                 {min: -1.5, max: 1.5, step: 0.01}
@@ -121,6 +143,7 @@ export default class Renderer
         this.postProcess.composer.setPixelRatio(this.config.pixelRatio)
 
         this.postProcess.composer.addPass(this.postProcess.renderPass)
+        this.postProcess.composer.addPass(this.postProcess.chromaticPass)
         this.postProcess.composer.addPass(this.postProcess.bloomPass)
     }
 
