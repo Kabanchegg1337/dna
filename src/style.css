@@ -1,3 +1,16 @@
+
+@font-face {
+    font-family: 'Darius';
+    src: url('./fonts/darius.woff2');
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url('./fonts/graphik-light.woff2');
+}
+
+
+
 *
 {
     margin: 0;
@@ -8,12 +21,168 @@
 html,
 body
 {
-    overflow: hidden;
+    /* overflow: hidden; */
+    font-size: 1vw;
 }
+
+
 
 .experience
 {
     position: fixed;
     width: 100vw;
     height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.wrapper {
+    height: auto;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 2;
+    color: #fff;
+}
+section {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 22.5rem;
+}
+
+section h1 {
+    display: flex;
+    flex-direction: column;
+    font-family: Darius,serif;
+    font-weight: 300;
+    font-size: 3.75rem;
+    line-height: 1.34em;
+    width: 58.33333%;
+    margin-left: 16.66667%;
+    mix-blend-mode: difference;
+
+    
+}
+
+
+section .col_2{
+    display: flex;
+    flex-direction: row;
+    margin-left: 16.66667%;
+}
+.numbers {
+    display: flex;
+    flex-direction: column;
+    width: 20.83333%;
+}
+.numbers .value {
+    margin-bottom: 6.875rem;
+}
+
+.value_wrapper {
+    padding-top: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.875rem;
+}
+.value_wrapper .value_text {
+    position: absolute;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    top: 50%;
+    font-size: 4.0625rem;
+    display: inline-block;
+    font-weight: 300;
+    line-height: .9em;
+    color: #fff;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+    font-family: Graphik;
+    transform: translateY(-50%);
+}
+.value_wrapper .circle {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    border: 2px solid #aca3ff;
+}
+
+.value_description {
+    font-size: 1.0625rem;
+    line-height: 1.4em;
+    letter-spacing: .01em;
+    color: hsla(0,0%,100%,.5);
+    text-align: center;
+    margin: 0 auto;
+    font-weight: 200;
+    width: 13.75rem;
+    font-family: Graphik;
+    font-weight: 200;
+}
+
+.content {
+    width: 29.16667%;
+    margin-bottom: 0;
+    margin-left: 12.5%;
+    padding-top: 4.0625rem;
+}
+
+.content h2 {
+    margin-bottom: 6rem;
+    max-width: 80rem;
+    display: flex;
+    flex-direction: column;
+    font-family: Darius,serif;
+    font-weight: 300;
+    line-height: 1.13em;
+    color: #fff;
+    font-size: 5rem;
+    mix-blend-mode: difference;
+    
+}
+.content .body {
+    font-family: Graphik,serif;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.8em;
+    color: #c0c9df;
+}
+
+
+.rows {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16.66667%;
+}
+.rows .row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 6.4375rem;
+}
+.row h3 {
+    display: flex;
+    flex-direction: column;
+    font-size: 3.125rem;
+    font-family: Darius,serif;
+    font-weight: 300;
+    line-height: 1.13em;
+    width: 20.83333%;
+}
+
+.row .description {
+    width: 29.16667%;
+    margin-left: 8.33333%;
+    font-family: Graphik,serif;
+    font-weight: 300;
+    font-size: 1.25rem;
+    line-height: 1.8em;
+    color: #c0c9df;
 }
